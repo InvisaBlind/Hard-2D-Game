@@ -7,7 +7,6 @@ public class BasicMovement : MonoBehaviour
 {
     public float speed = 5f;
     public float jumpVelocity = 5f;
-    public GameObject eyes;
     bool canJump;
     public bool jumpEnabled;
     Rigidbody2D rigidbody;
@@ -56,10 +55,10 @@ public class BasicMovement : MonoBehaviour
     {
         if (Input.GetAxis("Horizontal") > 0)
         {
-            eyes.transform.position = UnityEngine.Vector3.Lerp(eyes.transform.position, new UnityEngine.Vector3(transform.position.x - 0.02056f, transform.position.y, transform.position.z), .01f);
+            transform.eulerAngles = new Vector3(0f,0f,0f);
         } else if (Input.GetAxis("Horizontal") < 0)
         {
-            eyes.transform.position = UnityEngine.Vector3.Lerp(eyes.transform.position, new UnityEngine.Vector3(transform.position.x - 0.15f, transform.position.y, transform.position.z), .01f);
+            transform.eulerAngles = new Vector3(0f,180f,0f);
         }
     }
 }

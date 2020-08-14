@@ -6,13 +6,44 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
 
+    #region Variables
+
     private Rigidbody2D rb;
 
-    [SerializeField] private float maxSpeed;
-    [SerializeField] private float acceleration;
-    [SerializeField] private float stopForce;
+    [SerializeField] private float maxSpeed = 0f;
+    [SerializeField] private float timeToMaxSpeed = 0f;
+    [SerializeField] private float timeToStop = 0f;
+    [SerializeField] private float reverseSpeedMultiplier = 1f;
 
+    private float acceleration
+    {
+        get
+        {
+            return maxSpeed / timeToMaxSpeed;
+        }
+    }
+
+    private float stopForce
+    {
+        get
+        {
+            return Mathf.Abs(speed) / timeToStop;
+        }
+    }
+
+    private float xInput;
     private float speed = 0f;
+
+    #endregion
+
+    #region Unity Functions
+
+    [ExecuteInEditMode]
+    private void OnValidate()
+    {
+        timeToMaxSpeed = Mathf.Max(timeToMaxSpeed, 0);
+        timeToStop = Mathf.Max(timeToStop, 0);
+    }
 
     private void Awake()
     {
@@ -21,21 +52,51 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        xInput = Input.GetAxisRaw("Horizontal");
+    }
+
+    private void FixedUpdate()
+    {
         Move();
     }
 
+    #endregion
+
+    #region Helper Functions
+
     private void Move()
     {
-        float xInput = Input.GetAxisRaw("Horizontal");
         if (Mathf.Abs(xInput) > 0f)
         {
-            float targetSpeed = xInput * maxSpeed;
-            speed = Mathf.MoveTowards(speed, targetSpeed, acceleration * Time.deltaTime);
+            if (timeToMaxSpeed == 0)
+            {
+                speed = xInput * maxSpeed;
+            }
+            else
+            {
+                float targetSpeed = xInput * maxSpeed;
+                float tempAcceleration = acceleration;
+                if (Mathf.Sign(xInput) != Mathf.Sign(rb.velocity.x))
+                {
+                    tempAcceleration *= reverseSpeedMultiplier;
+                }
+                speed = Mathf.MoveTowards(speed, targetSpeed, tempAcceleration * Time.deltaTime);
+            }
         }
         else
         {
-            speed = Mathf.MoveTowards(speed, 0f, stopForce * Time.deltaTime);
+            if (timeToStop == 0)
+            {
+                speed = 0;
+            }
+            else
+            {
+                speed = Mathf.MoveTowards(speed, 0f, stopForce * Time.deltaTime);
+            }
         }
         rb.velocity = new Vector2(speed, rb.velocity.y);
     }
+
+    #endregion
+
 }

@@ -15,16 +15,29 @@ public class PlayerJump : MonoBehaviour
     [SerializeField] private float fallGravityMultiplier;
     [SerializeField] private float lowJumpGravityMultiplier;
 
-    private float gravity;
-    private float jumpForce;
+    private float gravity
+    {
+        get
+        {
+            return 2 * jumpHeight / Mathf.Pow(timeToJumpHeight, 2);
+        }
+    }
+
+    private float jumpForce
+    {
+        get
+        {
+            return Mathf.Abs(gravity) * timeToJumpHeight;
+        }
+    }
     
     [ExecuteInEditMode]
     private void OnValidate()
     {
         fallGravityMultiplier = Mathf.Max(1, fallGravityMultiplier);
         lowJumpGravityMultiplier = Mathf.Max(1, lowJumpGravityMultiplier);
-        gravity = 2 * jumpHeight / Mathf.Pow(timeToJumpHeight, 2);
-        jumpForce = Mathf.Abs(gravity) * timeToJumpHeight;
+        //gravity = 2 * jumpHeight / Mathf.Pow(timeToJumpHeight, 2);
+        //jumpForce = Mathf.Abs(gravity) * timeToJumpHeight;
         Physics2D.gravity = Vector2.down * gravity;
     }
 

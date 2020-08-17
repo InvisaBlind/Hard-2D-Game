@@ -541,10 +541,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpHeight: 2.5
-  timeToJumpHeight: 0.5
-  gravity: 20
-  jumpForce: 10
-  fallGravityMultiplier: 2.5
+  timeToJumpHeight: 0.45
+  fallGravityMultiplier: 3
   lowJumpGravityMultiplier: 2.5
 --- !u!114 &1600680006
 MonoBehaviour:

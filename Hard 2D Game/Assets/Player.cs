@@ -10,20 +10,12 @@ public class Player : MonoBehaviour
 
     public Rigidbody2D rb { get; private set; }
 
-    public bool IsGrounded
-    {
-        get
-        {
-            return _isGrounded;
-        }
-    }
+    public bool IsGrounded { get; private set; } = false;
 
+    [Header("Grounded Check Variables")]
     [SerializeField] private Transform feet;
     [SerializeField] private float groundCheckRayLength;
     [SerializeField] private LayerMask groundLayerMask;
-
-    [SerializeField]
-    private bool _isGrounded = false;
 
     private void Awake()
     {
@@ -35,7 +27,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        _isGrounded = Physics2D.Raycast(feet.position, Vector2.down, groundCheckRayLength, groundLayerMask);
+        IsGrounded = Physics2D.Raycast(feet.position, Vector2.down, groundCheckRayLength, groundLayerMask);
     }
 
     private void OnDrawGizmosSelected()
